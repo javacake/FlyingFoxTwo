@@ -61,7 +61,7 @@ public class GameScreen extends Screen {
                     world.fox.jumpLeft();
                 }
                 if(event.x > 256 && event.y > 416) {
-                    world.fox.jumpLeft();
+                    world.fox.jumpRight();
                 }
             }
         }
@@ -104,11 +104,6 @@ public class GameScreen extends Screen {
 	}
 	
 	
-	private void drawWorld(World world, float deltaTime) {
-		// TODO drawWorld
-		
-	}
-
 	@Override
 	public void pause() {
 
@@ -197,5 +192,15 @@ public class GameScreen extends Screen {
         g.drawPixmap(Assets.buttons, 128, 200, 0, 128, 64, 64);
         g.drawLine(0, 416, 480, 416, Color.BLACK);
     }	
-	
+
+    
+	private void drawWorld(World world, float deltaTime) {
+		// TODO drawWorld
+        Graphics g = game.getGraphics();
+        
+        Fox fox = world.fox;
+        g.drawPixmap(Assets.tail, fox.ScreenX, fox.ScreenY);
+
+	}
+
 }
