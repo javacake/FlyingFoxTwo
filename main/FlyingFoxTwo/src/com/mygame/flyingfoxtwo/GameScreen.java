@@ -199,19 +199,18 @@ public class GameScreen extends Screen {
 	private void drawWorld(World world, float deltaTime) {
 		// TODO drawWorld
         Graphics g = game.getGraphics();
-        
-        //int worldY = world.worldPosition * 32;
-        
+                
         for(int i = 0;i < world.WORLD_WIDTH;i++){
         	for(int j = 0;j < world.WORLD_HEIGHT;j+=3){
         		if(world.platform[i][j]){
-        			g.drawPixmap(Assets.tail, i * 32, j * 32 - world.worldY );
+        			g.drawPixmap(Assets.tail, i * 32, j * 32 - world.worldPosition );
         		}
         	}
         }
         
         Fox fox = world.fox;
-        g.drawPixmap(Assets.fox, fox.ScreenX, fox.ScreenY - world.worldY);
+       	g.drawPixmap(Assets.fox, fox.ScreenX, fox.ScreenY - world.worldPosition);
+        	
 	}
 
 }

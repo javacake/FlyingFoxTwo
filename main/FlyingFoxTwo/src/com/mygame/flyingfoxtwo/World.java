@@ -17,8 +17,8 @@ public class World {
     public Fox fox;
     public boolean gameOver = false;;
     public int score = 0;
-    public int worldPosition = 10;
-    public int worldY;
+    public int worldPosition;
+    public int worldGridY = 10;
 
     boolean platform[][] = new boolean[WORLD_WIDTH][WORLD_HEIGHT];
     Random random = new Random();
@@ -29,7 +29,7 @@ public class World {
     public World() {
         fox = new Fox(4, WORLD_HEIGHT - 1);
         
-        worldY = worldPosition * 32;
+        worldPosition = worldGridY * 32;
     	
         int i;
     	for(int j = 0;j < WORLD_HEIGHT;j+=3){
@@ -46,10 +46,7 @@ public class World {
 
         tickTime += deltaTime;
         smallTick += deltaTime;
-        
-        //Log.d("world update", "t: " + tick + " tT: " + tickTime + " dT: " + deltaTime);
-
-        
+                
         while (smallTick > (tick/4)) {
         	smallTick -= (tick/4);
 
@@ -57,16 +54,12 @@ public class World {
 //            int dt = (int) (64 * tickTime);
 //            if(dt > 32) dt = 32;
 
-//            if(worldY > worldPosition * 32)
-//            	worldY -= 8; 
-
             if(fox.ScreenX != fox.GridX * 32){
 	            if(fox.ScreenX > fox.NewScreenX)
 	            	fox.ScreenX -= 8;
 	            else
 	            	fox.ScreenX += 8;
             }
-        	//Log.e("x","x: " + fox.ScreenX);
         	
             if(fox.ScreenY != fox.GridY * 32){
 	            if(fox.ScreenY > fox.NewScreenY)
@@ -75,19 +68,21 @@ public class World {
 	            	fox.ScreenY +=8;
             }
             
-            //Log.e("Y", "Y: " + fox.ScreenY);
-            
+            if(fox.freez){
+            	worldPosition -= 8;
+            	if(worldPosition < worldGridY * 32)
+            		worldPosition = worldGridY * 32;
+            	
+            	Log.d("Position","fox: " + fox.ScreenY + " world: " + worldPosition);
+            }
        }        
         
         while (tickTime > tick) {
             tickTime -= tick;
 
-            //Log.w("Tick", "tT: " + tickTime);
-//            if(worldY > worldPosition * 32)
-//            	worldY = worldPosition * 32;
-//            if(worldPosition > 0) worldPosition--;
-            
             fox.advance(accelX);
+            
+            updateScroll();
             
             try{
 	            if(fox.VerticalDirection == fox.DOWN){
@@ -106,17 +101,28 @@ public class World {
             	gameOver = true;
             	return;
             }
-            
-            
-            /*if(fox.GridY >= worldPosition + 13){
-            	gameOver = true;
-            	Log.d("Error", "X: " + fox.GridX + "Y: " + fox.GridY);
-            	return;
-            }*/
-            
         }
-        
 	}    
+	
+	private void updateScroll(){
+		
+		worldPosition = worldGridY * 32;
+
+		//Log.d("fxposition","fgrid--- " + (fox.GridY - worldGridY));
+		//Log.d("Jmposition","---fjump: " + fox.jumpPosition);
+		
+		if(worldGridY != 0){	
+			//if(fox.GridY - worldGridY <= 2 && fox.isJumping())
+			if(fox.GridY - worldGridY <= 2)
+			{
+				fox.freez = true;
+				worldGridY -= 1;
+				//Log.w("frezz", "Start---------------------");
+			}
+		}else{
+			fox.freez = false;
+		}
+	}
 	
 	private void checkGameOver(){
 		//if fox outside screen
