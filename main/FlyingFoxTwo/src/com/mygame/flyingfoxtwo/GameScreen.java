@@ -33,10 +33,12 @@ public class GameScreen extends Screen {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
         game.getInput().getKeyEvents();
         
+        float AccelX = game.getInput().getAccelX();
+        
         if(state == GameState.Ready)
             updateReady(touchEvents);
         if(state == GameState.Running)
-            updateRunning(touchEvents, deltaTime);
+            updateRunning(touchEvents, deltaTime, AccelX);
         if(state == GameState.Paused)
             updatePaused(touchEvents);
         if(state == GameState.GameOver)
@@ -44,7 +46,7 @@ public class GameScreen extends Screen {
 	}
 
     
-    private void updateRunning(List<TouchEvent> touchEvents, float deltaTime) {        
+    private void updateRunning(List<TouchEvent> touchEvents, float deltaTime, float accelX) {        
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
@@ -66,7 +68,7 @@ public class GameScreen extends Screen {
             }
         }
         
-        world.update(deltaTime);
+        world.update(deltaTime, accelX);
         
         if(world.gameOver) {
             if(Settings.soundEnabled)
@@ -199,7 +201,17 @@ public class GameScreen extends Screen {
         Graphics g = game.getGraphics();
         
         Fox fox = world.fox;
-        g.drawPixmap(Assets.tail, fox.ScreenX, fox.ScreenY);
+        g.drawPixmap(Assets.fox, fox.ScreenX, fox.ScreenY);
+        
+        //int worldY = world.worldPosition * 32;
+        
+        for(int i = 0;i < world.WORLD_WIDTH;i++){
+        	for(int j = 0;j < world.WORLD_HEIGHT;j+=3){
+        		if(world.platform[i][j]){
+        			g.drawPixmap(Assets.tail, i * 32, j * 32 - world.worldY );
+        		}
+        	}
+        }
 
 	}
 

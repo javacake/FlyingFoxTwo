@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import org.openintents.sensorsimulator.hardware.*;
 
 public class AccelerometerHandler implements SensorEventListener {
     float accelX;
@@ -12,8 +13,10 @@ public class AccelerometerHandler implements SensorEventListener {
     float accelZ;
 
     public AccelerometerHandler(Context context) {
-        SensorManager manager = (SensorManager) context
+
+    	SensorManager manager = (SensorManager) context
                 .getSystemService(Context.SENSOR_SERVICE);
+    	        
         if (manager.getSensorList(Sensor.TYPE_ACCELEROMETER).size() != 0) {
             Sensor accelerometer = manager.getSensorList(
                     Sensor.TYPE_ACCELEROMETER).get(0);

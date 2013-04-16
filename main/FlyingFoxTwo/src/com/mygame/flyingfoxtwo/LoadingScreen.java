@@ -34,6 +34,7 @@ public class LoadingScreen extends Screen {
         Assets.stain1 = g.newPixmap("stain1.png", PixmapFormat.ARGB4444);
         Assets.stain2 = g.newPixmap("stain2.png", PixmapFormat.ARGB4444);
         Assets.stain3 = g.newPixmap("stain3.png", PixmapFormat.ARGB4444);
+        Assets.fox = g.newPixmap("fox.png", PixmapFormat.ARGB4444);
         Assets.click = game.getAudio().newSound("click.ogg");
         Assets.eat = game.getAudio().newSound("eat.ogg");
         Assets.bitten = game.getAudio().newSound("bitten.ogg");

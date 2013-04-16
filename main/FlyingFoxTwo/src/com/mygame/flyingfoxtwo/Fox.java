@@ -11,6 +11,7 @@ public class Fox {
     static final int LEFT = -1;
     static final int RIGHT = 1;
     static final int MIDDLE = 0;
+    final int JUMP_HEIGHT = 5;
 	
 	public boolean isfallDown = false;
 	
@@ -20,7 +21,8 @@ public class Fox {
 	public int ScreenY;
 	public int NewScreenX;
 	public int NewScreenY;
-	
+	public float ax;
+	public int jumpStartY;
 	
 	public int VerticalDirection;
 	public int HorizontalDirection;
@@ -31,6 +33,8 @@ public class Fox {
 		
 		GridX = x;
 		GridY = y;
+		
+		jumpStartY = GridY;
 		
 		ScreenX = GridX * 32;
 		ScreenY = GridY * 32;
@@ -46,8 +50,9 @@ public class Fox {
 		HorizontalDirection = RIGHT;
 	}
 	
-	public void advance() {
+	public void advance(float accelX) {
 		// TODO Auto-generated method stub
+		
 		
 		if(HorizontalDirection == LEFT){
 			GridX -= 1;
@@ -70,27 +75,27 @@ public class Fox {
 			GridY -= 1;
 		else
 			GridY += 1;
-		
-		//Jump
-		if(GridY < 8){
+
+		//If at the top
+		if(GridY < 0) {
+			GridY = 0;
+//			ScreenX = GridX * 32;
+//			ScreenY = GridY * 32;
 			VerticalDirection = DOWN;
 		}
 		
-		//Check other tiles for collision then change vert direction
+		//If at the maximum height of jump then come down
+		if(jumpStartY - GridY >= JUMP_HEIGHT){
+			VerticalDirection = DOWN;
+		}
 		
 		//Game over
-		if(GridY >= 13) {
+		/*if(GridY >= 13) {
 			GridY = 12; 
 			VerticalDirection = UP;
 			HorizontalDirection = MIDDLE;
 		}//Game Over
-		
-		//Temp
-		if(GridY < 0) {
-			GridY = 12;
-			ScreenX = GridX * 32;
-			ScreenY = GridY * 32;
-		}
+*/		
 		
 		NewScreenY = (GridY * 32);
 		
