@@ -200,9 +200,6 @@ public class GameScreen extends Screen {
 		// TODO drawWorld
         Graphics g = game.getGraphics();
         
-        Fox fox = world.fox;
-        g.drawPixmap(Assets.fox, fox.ScreenX, fox.ScreenY);
-        
         //int worldY = world.worldPosition * 32;
         
         for(int i = 0;i < world.WORLD_WIDTH;i++){
@@ -212,7 +209,9 @@ public class GameScreen extends Screen {
         		}
         	}
         }
-
+        
+        Fox fox = world.fox;
+        g.drawPixmap(Assets.fox, fox.ScreenX, fox.ScreenY - world.worldY);
 	}
 
 }

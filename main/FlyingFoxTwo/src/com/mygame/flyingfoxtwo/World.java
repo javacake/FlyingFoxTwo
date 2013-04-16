@@ -27,7 +27,7 @@ public class World {
     static float tick = TICK_INITIAL;
 
     public World() {
-        fox = new Fox(4, 22);
+        fox = new Fox(4, WORLD_HEIGHT - 1);
         
         worldY = worldPosition * 32;
     	
@@ -57,10 +57,10 @@ public class World {
 //            int dt = (int) (64 * tickTime);
 //            if(dt > 32) dt = 32;
 
-            if(worldY > worldPosition * 32)
-            	worldY -= 8; 
+//            if(worldY > worldPosition * 32)
+//            	worldY -= 8; 
 
-/*            if(fox.ScreenX != fox.GridX * 32){
+            if(fox.ScreenX != fox.GridX * 32){
 	            if(fox.ScreenX > fox.NewScreenX)
 	            	fox.ScreenX -= 8;
 	            else
@@ -73,7 +73,9 @@ public class World {
 	            	fox.ScreenY -= 8;
 	            else
 	            	fox.ScreenY +=8;
-            }*/
+            }
+            
+            //Log.e("Y", "Y: " + fox.ScreenY);
             
        }        
         
@@ -81,34 +83,48 @@ public class World {
             tickTime -= tick;
 
             //Log.w("Tick", "tT: " + tickTime);
-            if(worldY > worldPosition * 32)
-            	worldY = worldPosition * 32;
-            if(worldPosition > 0) worldPosition--;
+//            if(worldY > worldPosition * 32)
+//            	worldY = worldPosition * 32;
+//            if(worldPosition > 0) worldPosition--;
             
-            //fox.advance(accelX);
+            fox.advance(accelX);
             
             try{
 	            if(fox.VerticalDirection == fox.DOWN){
-	            	//if(fox.GridY )
-	            	if(platform[fox.GridX][fox.GridY + 1]){
-	            		fox.VerticalDirection = fox.UP;
-	            		fox.jumpStartY = fox.GridY;
+	            	if(fox.GridY >= WORLD_HEIGHT - 1){
+	            		//gameOver = true;
+	            		fox.jumpStart();
+	            		//Log.d("UP", "At bottom");
+	                	//return;
+	            	}else if(platform[fox.GridX][fox.GridY + 1]){ //if fox collied with platform then
+	            		fox.jumpStart();
+	            		//Log.d("UP", "Collied");
 	            	}
-            }
+	            }
             }catch(ArrayIndexOutOfBoundsException ex){
-            	Log.d("Error", "X: " + fox.GridX + "Y: " + fox.GridY);
+            	Log.d("Array Error", "X: " + fox.GridX + "Y: " + fox.GridY);
             	gameOver = true;
             	return;
             }
             
-            if(fox.GridY >= worldPosition + 13){
+            
+            /*if(fox.GridY >= worldPosition + 13){
             	gameOver = true;
+            	Log.d("Error", "X: " + fox.GridX + "Y: " + fox.GridY);
             	return;
-            }
+            }*/
             
         }
         
 	}    
+	
+	private void checkGameOver(){
+		//if fox outside screen
+		
+		//if fox hit at the top
+		
+		
+	}
 }
 
 
