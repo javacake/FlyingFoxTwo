@@ -11,7 +11,7 @@ public class World {
     static final int WORLD_HEIGHT = 23;
     static final int SCORE_INCREMENT = 10;
     
-    static final float TICK_INITIAL = 0.5f;
+    static final float TICK_INITIAL = 0.2f;
     static final float TICK_DECREMENT = 0.05f;
     
     public Fox fox;
@@ -47,7 +47,8 @@ public class World {
         tickTime += deltaTime;
         smallTick += deltaTime;
                 
-        while (smallTick > (tick/4)) {
+        while (smallTick > (tick/4)) 
+        {
         	smallTick -= (tick/4);
 
             //Log.e("small", "sT: " + tickTime);
@@ -65,15 +66,17 @@ public class World {
 	            if(fox.ScreenY > fox.NewScreenY)
 	            	fox.ScreenY -= 8;
 	            else
-	            	fox.ScreenY +=8;
+	            	fox.ScreenY += 8;
             }
             
             if(fox.freez){
+            	
             	worldPosition -= 8;
+            	
             	if(worldPosition < worldGridY * 32)
             		worldPosition = worldGridY * 32;
             	
-            	Log.d("Position","fox: " + fox.ScreenY + " world: " + worldPosition);
+            	//Log.d("Position","fox: " + fox.ScreenY + " world: " + worldPosition);
             }
        }        
         
@@ -86,11 +89,15 @@ public class World {
             
             try{
 	            if(fox.VerticalDirection == fox.DOWN){
+	            	//Log.d("iscolid", "---" + fox.GridY);
 	            	if(fox.GridY >= WORLD_HEIGHT - 1){
 	            		//gameOver = true;
 	            		fox.jumpStart();
 	            		//Log.d("UP", "At bottom");
 	                	//return;
+	            	}else if(fox.GridY >= worldGridY + 13){ //fox fall down then gameover
+	            		gameOver=true;
+	            		return;
 	            	}else if(platform[fox.GridX][fox.GridY + 1]){ //if fox collied with platform then
 	            		fox.jumpStart();
 	            		//Log.d("UP", "Collied");

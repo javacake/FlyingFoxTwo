@@ -3,7 +3,6 @@ package com.mygame.flyingfoxtwo;
 import android.util.Log;
 
 
-
 public class Fox {
 
     static final int UP = -1;
@@ -51,15 +50,15 @@ public class Fox {
 	
 	public void advance(float accelX) {
 
-		//Update grid position for continue jump
-		updateVerticalJump();
-		
+		//Advance grid position for continue jump
 		if(VerticalDirection == UP){
 			GridY -= 1;
 		}
 		else{
 			GridY += 1;
 		}
+		
+		updateVerticalJump();	
 		
 		//New screen position for fox to move
 		NewScreenY = (GridY * 32);
@@ -73,7 +72,7 @@ public class Fox {
 		if(jumpPosition <= 0){
 			VerticalDirection = DOWN;
 			freez = false;
-			//Log.e("Freez","Stop---------------");
+			//Log.e("Down","---------------" + GridY);
 		}else{
 			jumpPosition--;
 			//Log.e("JumpPosition", jumpPosition + "--------");
@@ -94,7 +93,6 @@ public class Fox {
 			//TODO Game winning condition
 			//***************************
 			//***************************
-			
 		}	
 	}
 	
@@ -149,8 +147,6 @@ public class Fox {
 			
 		}		
 	}
-	
-	
-	
+
 
 }
