@@ -10,7 +10,9 @@ import com.mygame.framework.Game;
 import com.mygame.framework.Screen;
 
 public class GameScreen extends Screen {
-    enum GameState {
+    static final int PixelUnit = 32;
+	
+	enum GameState {
         Ready,
         Running,
         Paused,
@@ -21,7 +23,6 @@ public class GameScreen extends Screen {
     World world;
     int oldScore = 0;
     String score = "0";
-    
     
 	public GameScreen(Game game) {
 		super(game);
@@ -175,7 +176,7 @@ public class GameScreen extends Screen {
         Graphics g = game.getGraphics();
 
         g.drawPixmap(Assets.buttons, 0, 0, 64, 128, 64, 64);
-        g.drawLine(0, 416, 480, 416, Color.BLACK);
+        //g.drawLine(0, 416, 480, 416, Color.BLACK);
         g.drawPixmap(Assets.buttons, 0, 416, 64, 64, 64, 64);
         g.drawPixmap(Assets.buttons, 256, 416, 0, 64, 64, 64);
     }
@@ -192,24 +193,27 @@ public class GameScreen extends Screen {
         
         g.drawPixmap(Assets.gameOver, 62, 100);
         g.drawPixmap(Assets.buttons, 128, 200, 0, 128, 64, 64);
-        g.drawLine(0, 416, 480, 416, Color.BLACK);
+        //g.drawLine(0, 416, 480, 416, Color.BLACK);
     }	
 
-    
 	private void drawWorld(World world, float deltaTime) {
 		// TODO drawWorld
         Graphics g = game.getGraphics();
-                
-        for(int i = 0;i < world.WORLD_WIDTH;i++){
-        	for(int j = 0;j < world.WORLD_HEIGHT;j+=3){
+      
+        //int worldPosition = world.worldGridY * PixelUnit;
+
+        //Draw with the variables in smoothMove methods for smooth movement
+        
+        for(int i = 0;i < World.WORLD_WIDTH;i++){
+        	for(int j = 0;j < World.WORLD_HEIGHT;j+=3){
         		if(world.platform[i][j]){
-        			g.drawPixmap(Assets.tail, i * 32, j * 32 - world.worldPosition );
+        			g.drawPixmap(Assets.tail, i * PixelUnit, j * PixelUnit - world.worldPosition );
         		}
         	}
         }
         
         Fox fox = world.fox;
-       	g.drawPixmap(Assets.fox, fox.ScreenX, fox.ScreenY - world.worldPosition);
+        g.drawPixmap(Assets.fox, fox.ScreenX, fox.ScreenY - world.worldPosition);
         	
 	}
 
