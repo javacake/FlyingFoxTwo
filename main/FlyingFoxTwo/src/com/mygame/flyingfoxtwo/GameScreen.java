@@ -1,8 +1,6 @@
 package com.mygame.flyingfoxtwo;
 
 import java.util.List;
-
-import android.graphics.Color;
 import com.mygame.framework.Graphics;
 import com.mygame.framework.Input.TouchEvent;
 import com.mygame.framework.Game;
@@ -120,7 +118,13 @@ public class GameScreen extends Screen {
 	
 	@Override
 	public void pause() {
-
+        if(state == GameState.Running)
+            state = GameState.Paused;
+		
+        if(world.gameOver || world.gameWon) {
+            Settings.addScore(world.score);
+            Settings.save(game.getFileIO());
+        }
 	}
 
 	@Override
