@@ -24,9 +24,11 @@ public class Fox {
 	
 	public int VerticalDirection;
 	public int HorizontalDirection;
+	public boolean FaceLeft;
 	
 	public Fox(int x, int y){
 		HorizontalDirection = NONE;
+		FaceLeft = true;
 		
 		GridX = x;
 		GridY = y;
@@ -49,6 +51,11 @@ public class Fox {
 	}
 	
 	public void advance(float accelX) {
+		
+		if(accelX >= 1)
+			HorizontalDirection = LEFT;
+		else if(accelX <= -1)
+			HorizontalDirection = RIGHT;
 
 		updateHorizontalMove();
 
@@ -90,6 +97,8 @@ public class Fox {
 	
 	private void updateHorizontalMove(){
 		if(HorizontalDirection == LEFT){
+			FaceLeft = true;
+			
 			//decreamentX
 			GridX -= 1;
 			if(GridX < 0) {
@@ -100,6 +109,8 @@ public class Fox {
 			}
 			
 		}else if(HorizontalDirection == RIGHT){
+			FaceLeft = false;
+			
 			//increamentX
 			GridX += 1;
 

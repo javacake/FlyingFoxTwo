@@ -5,7 +5,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import org.openintents.sensorsimulator.hardware.*;
 
 public class AccelerometerHandler implements SensorEventListener {
     float accelX;

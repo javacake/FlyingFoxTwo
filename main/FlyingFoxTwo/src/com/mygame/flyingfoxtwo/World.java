@@ -17,6 +17,9 @@ public class World {
     static final int TICK_SLICE = 4;
 
     public boolean gameOver = false;   
+    public boolean gameWon = false;
+    
+    int scoregrid;
     public int score;
     float tickTime;
     float smallTick;
@@ -36,6 +39,7 @@ public class World {
         worldPosition = worldGridY * GameScreen.PixelUnit;
         
         score = 0;
+        scoregrid = 6;
         worldGridY = WORLD_HEIGHT - 15; //Screen height
 		tickTime = 0;
 		smallTick = 0;
@@ -47,10 +51,13 @@ public class World {
         Random random = new Random();
         int i;
     	for(int j = 0;j < WORLD_HEIGHT;j+=3){
-    		i = random.nextInt(WORLD_WIDTH - 2);
-    		platform[i][j] = true;
+    		//Draw platform near to each other minus three
+    		i = random.nextInt(WORLD_WIDTH - 3);
     		platform[i+1][j] = true;
+    		platform[i+2][j] = true;
     	}
+    	
+    	updateScroll();
     }
 
 	public void update(float deltaTime, float accelX) {
@@ -99,19 +106,27 @@ public class World {
         while (tickTime > tick) {
             tickTime -= tick;
             
+            if(fox.GridY < WORLD_HEIGHT - 7 ){
+            	if(scoregrid < WORLD_HEIGHT - fox.GridY){
+            		scoregrid++;
+            		score = (scoregrid - 6) * 20;
+            	}
+            }
+            
 	        if(fox.GridY == 0){
-	    		gameOver = true;
+	        	gameWon = true;
+	    		//gameOver = true;
 	    		return;
-	    	}
+	    	}        
 	        
 	        smoothTick = TICK_SLICE;
 	        
             //Fox jumping up
-            if(fox.VerticalDirection == fox.UP){
+            if(fox.VerticalDirection == fox.DOWN){
             	
-            	     updateScroll();
+            	     //updateScroll();
             	     
-            }else{
+            //}else{
             //fox jumping down
             	
             	//if hit at bottom then jump
@@ -130,7 +145,10 @@ public class World {
             	}
 
             }
+            
             fox.advance(accelX);
+            updateScroll();
+            
         }
 
 	}    
@@ -138,15 +156,15 @@ public class World {
 	
 	private void smoothMove(){
 
-//            if(scrolling){
-//            	
-//            	worldPosition -= fox.deltaDst;
-//            	
-//            	if(worldPosition < worldGridY * GameScreen.PixelUnit)
-//            		worldPosition = worldGridY * GameScreen.PixelUnit;
-//            	
-//            	//Log.d("Position","fox: " + fox.ScreenY + " world: " + worldPosition);
-//            }			
+            if(scrolling){
+            	
+            	worldPosition -= fox.deltaDst;
+            	
+            	if(worldPosition < worldGridY * GameScreen.PixelUnit)
+            		worldPosition = worldGridY * GameScreen.PixelUnit;
+            	
+            	//Log.d("Position","fox: " + fox.ScreenY + " world: " + worldPosition);
+            }			
 			
 			
             //if(fox.ScreenX != fox.GridX * GameScreen.PixelUnit){
