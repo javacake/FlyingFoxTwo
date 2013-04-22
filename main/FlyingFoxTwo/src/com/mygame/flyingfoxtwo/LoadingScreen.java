@@ -4,6 +4,7 @@ import com.mygame.framework.Graphics;
 import com.mygame.framework.Graphics.PixmapFormat;
 import com.mygame.framework.Game;
 import com.mygame.framework.Screen;
+import com.mygame.framework.Sound;
 
 public class LoadingScreen extends Screen {
 
@@ -30,9 +31,14 @@ public class LoadingScreen extends Screen {
         Assets.cloudBack = g.newPixmap("Cloudbackground.png", PixmapFormat.ARGB4444);        
         Assets.ground = g.newPixmap("ground.png", PixmapFormat.ARGB4444);
         Assets.gameWon = g.newPixmap("gamewon.png", PixmapFormat.ARGB4444);
+        Assets.coin = g.newPixmap("coin.png", PixmapFormat.ARGB4444);
         
         Assets.click = game.getAudio().newSound("click.ogg");
-        Assets.fall = game.getAudio().newSound("fall.ogg");
+        Assets.fall = game.getAudio().newSound("Falling.ogg");
+        Assets.Winmz = game.getAudio().newSound("win.ogg");
+        
+        Assets.backmz = game.getAudio().newMusic("backmz.ogg");
+        Assets.backmz.setLooping(true);
         
         Settings.load(game.getFileIO());
         game.setScreen(new StartMenuScreen(game));

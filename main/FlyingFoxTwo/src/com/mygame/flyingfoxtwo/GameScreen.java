@@ -21,10 +21,12 @@ public class GameScreen extends Screen {
     World world;
     int oldScore = 0;
     String score = "0";
+    boolean isHard = false;
     
-	public GameScreen(Game game) {
+	public GameScreen(Game game, boolean isHard) {
 		super(game);
-		world = new World();
+		world = new World(isHard);
+		this.isHard = isHard;
 	}
 
 	@Override
@@ -49,6 +51,12 @@ public class GameScreen extends Screen {
     
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime, float accelX) {        
         int len = touchEvents.size();
+        
+        if(Settings.soundEnabled){
+        	if(!Assets.backmz.isPlaying())
+        		Assets.backmz.play();
+        }
+        
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if(event.type == TouchEvent.TOUCH_UP) {
@@ -72,14 +80,10 @@ public class GameScreen extends Screen {
         world.update(deltaTime, accelX);
 
         if(world.gameWon) {
-            if(Settings.soundEnabled)
-                Assets.fall.play(1);
             state = GameState.GameWon;
         }
        
         if(world.gameOver) {
-            if(Settings.soundEnabled)
-                Assets.fall.play(1);
             state = GameState.GameOver;
         }
         
@@ -107,11 +111,12 @@ public class GameScreen extends Screen {
         }
         if(state == GameState.Paused)
             drawPausedUI();
-        if(state == GameState.GameOver)
+        if(state == GameState.GameOver){
             drawGameOverUI();
-        if(state == GameState.GameWon)
+        }
+        if(state == GameState.GameWon){
         	drawGameWonUI();
-        
+        }
         drawText(g, score, g.getWidth() / 2 - score.length()*20 / 2, g.getHeight() - 42);   
 	}
 	
@@ -139,23 +144,36 @@ public class GameScreen extends Screen {
     private void updateReady(List<TouchEvent> touchEvents) {
         if(touchEvents.size() > 0)
             state = GameState.Running;
+        
+        if(Settings.soundEnabled){
+        	if(!Assets.backmz.isPlaying())
+        		Assets.backmz.play();
+        }
     }
     
     private void updatePaused(List<TouchEvent> touchEvents) {
+    	
+        if(Settings.soundEnabled){
+        	if(Assets.backmz.isPlaying())
+        		Assets.backmz.stop();
+        }
+    	
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(event.x > 80 && event.x <= 240) {
                     if(event.y > 100 && event.y <= 148) {
-                        if(Settings.soundEnabled)
+                        if(Settings.soundEnabled){
                             Assets.click.play(1);
+                        }
                         state = GameState.Running;
                         return;
                     }                    
                     if(event.y > 148 && event.y < 196) {
-                        if(Settings.soundEnabled)
+                        if(Settings.soundEnabled){
                             Assets.click.play(1);
+                        }
                         game.setScreen(new StartMenuScreen(game));                        
                         return;
                     }
@@ -165,14 +183,22 @@ public class GameScreen extends Screen {
     }
     
     private void updateGameOver(List<TouchEvent> touchEvents) {
+    	
+        if(Settings.soundEnabled){
+        	if(!Assets.backmz.isPlaying())
+        		Assets.backmz.stop();
+        	//Assets.fall.play(1);
+        }
+    	
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(event.x >= 128 && event.x <= 192 &&
                    event.y >= 200 && event.y <= 264) {
-                    if(Settings.soundEnabled)
+                    if(Settings.soundEnabled){
                         Assets.click.play(1);
+                    }
                     game.setScreen(new StartMenuScreen(game));
                     return;
                 }
@@ -181,6 +207,13 @@ public class GameScreen extends Screen {
     }
     
     private void updateGameWon(List<TouchEvent> touchEvents) {
+    	
+        if(Settings.soundEnabled){
+        	if(!Assets.backmz.isPlaying())
+        		Assets.backmz.stop();
+        	//Assets.Winmz.play(1);
+        }    	
+    	
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
@@ -189,6 +222,7 @@ public class GameScreen extends Screen {
                    event.y >= 200 && event.y <= 264) {
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
+                    
                     game.setScreen(new StartMenuScreen(game));
                     return;
                 }
@@ -269,11 +303,19 @@ public class GameScreen extends Screen {
     	
         //platforms
         for(int i = 0;i < World.WORLD_WIDTH;i++){
-        	for(int j = 0;j < World.WORLD_HEIGHT;j+=3){
-        		if(world.platform[i][j]){
+        	int increament = isHard?4:3;
+        	for(int j = 0;j < World.WORLD_HEIGHT;j+=increament){
+        		if(world.platform[i][j] == 1){
         			g.drawPixmap(Assets.platform, i * PixelUnit, j * PixelUnit - world.worldPosition );
         		}
         	}
+        	
+        	for(int j = 0;j < World.WORLD_HEIGHT;j+=(increament+1)){
+        		//Draw platform near to each other minus three
+        			if(world.platform[i][j] == 2){
+        				g.drawPixmap(Assets.coin, i * PixelUnit, j * PixelUnit - world.worldPosition );
+        			}
+        		}
         }
         
         Fox fox = world.fox;

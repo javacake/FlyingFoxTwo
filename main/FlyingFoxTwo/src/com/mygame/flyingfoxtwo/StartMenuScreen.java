@@ -23,27 +23,34 @@ public class StartMenuScreen extends Screen {
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
             if(event.type == TouchEvent.TOUCH_UP) {
-                if(inBounds(event, 0, g.getHeight() - 64, 64, 64)) {
+                if(inBounds(event, 256, g.getHeight() - 64, 64, 64)) {
                     Settings.soundEnabled = !Settings.soundEnabled;
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                 }
                 
                 if(inBounds(event, 64, 220, 192, 42) ) {
-                    game.setScreen(new GameScreen(game));
+                    game.setScreen(new GameScreen(game,false));
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                     return;
                 }
                 
                 if(inBounds(event, 64, 220 + 42, 192, 42) ) {
-                    game.setScreen(new HighscoreScreen(game));
+                    game.setScreen(new GameScreen(game,true));
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
                     return;
                 }
                 
                 if(inBounds(event, 64, 220 + 84, 192, 42) ) {
+                    game.setScreen(new HighscoreScreen(game));
+                    if(Settings.soundEnabled)
+                        Assets.click.play(1);
+                    return;
+                }
+                
+                if(inBounds(event, 64, 220 + 126, 192, 42) ) {
                     game.setScreen(new HelpScreen(game));
                     if(Settings.soundEnabled)
                         Assets.click.play(1);
@@ -69,10 +76,11 @@ public class StartMenuScreen extends Screen {
         g.drawPixmap(Assets.background, 0, 0);
         g.drawPixmap(Assets.logo, 32, 20);
         g.drawPixmap(Assets.mainMenu, 64, 220);
+        
         if(Settings.soundEnabled)
-            g.drawPixmap(Assets.buttons, 0, 416, 0, 0, 64, 64);
+            g.drawPixmap(Assets.buttons, 256, 416, 0, 0, 64, 64);
         else
-            g.drawPixmap(Assets.buttons, 0, 416, 64, 0, 64, 64);
+            g.drawPixmap(Assets.buttons, 256, 416, 64, 0, 64, 64);
 	}
 
 	@Override

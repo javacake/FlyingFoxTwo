@@ -26,14 +26,15 @@ public class World {
     static float tick; //use to increase game speed by decreasing tick
     boolean scrolling;
     int smoothTick;
-    
+    boolean isHard;
     public int worldPosition;
     public int worldGridY;
 
     public Fox fox;
-    boolean platform[][];
+    int platform[][];
     
-    public World() {
+    public World(boolean isHard) {
+    	this.isHard = isHard;
         fox = new Fox(4, WORLD_HEIGHT - 1);
         
         worldPosition = worldGridY * GameScreen.PixelUnit;
@@ -47,16 +48,26 @@ public class World {
 		scrolling = false;
 		smoothTick = TICK_SLICE;
 		
-        platform = new boolean[WORLD_WIDTH][WORLD_HEIGHT];
+        platform = new int[WORLD_WIDTH][WORLD_HEIGHT];
         Random random = new Random();
         int i;
-    	for(int j = 0;j < WORLD_HEIGHT;j+=3){
+        int increament = isHard?4:3;
+ 
+    	for(int j = 0;j < WORLD_HEIGHT;j+=(increament+2)){
+    		//Draw platform near to each other minus three
+    		if(random.nextInt(5)>=2){	
+    			i = random.nextInt(WORLD_WIDTH - 2);
+    			platform[i][j] = 2;
+    		}
+    	}        
+        
+    	for(int j = 0;j < WORLD_HEIGHT;j+=increament){
     		//Draw platform near to each other minus three
     		i = random.nextInt(WORLD_WIDTH - 3);
-    		platform[i+1][j] = true;
-    		platform[i+2][j] = true;
+    		platform[i+1][j] = 1;
+    		platform[i+2][j] = 1;
     	}
-    	
+
     	updateScroll();
     }
 
@@ -79,7 +90,12 @@ public class World {
 		        	if(worldPosition < worldGridY * GameScreen.PixelUnit)
 		        		worldPosition = worldGridY * GameScreen.PixelUnit;
 	
-				}				
+				}
+				
+	            if(platform[fox.GridX][fox.GridY] == 2){
+	            	platform[fox.GridX][fox.GridY] = 0;
+	            	score += 15;
+	        	}
 
 	            if(fox.ScreenX > fox.NewScreenX)
 	            	fox.ScreenX -= 8;
@@ -113,9 +129,16 @@ public class World {
             	}
             }
             
+            
 	        if(fox.GridY == 0){
 	        	gameWon = true;
 	    		//gameOver = true;
+	        	if(Settings.soundEnabled){
+	        		if(Assets.backmz.isPlaying())
+	            		Assets.backmz.stop();
+	        		Assets.Winmz.play(1);
+	        	}
+	        	
 	    		return;
 	    	}        
 	        
@@ -136,9 +159,14 @@ public class World {
             		
             		//fox fall down then gameover
             		gameOver=true;
+    	        	if(Settings.soundEnabled){
+    	        		if(Assets.backmz.isPlaying())
+    	            		Assets.backmz.stop();
+    	        		Assets.fall.play(1);
+    	        	}
             		return;
             		
-            	}else if(platform[fox.GridX][fox.GridY + 1]){ 
+            	}else if(platform[fox.GridX][fox.GridY + 1] == 1){ 
             		//if fox collied with platform then jump
             		//DO not check horizontal collision only vertical
             		fox.jump();

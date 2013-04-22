@@ -1,5 +1,6 @@
 package com.mygame.flyingfoxtwo;
 
+import com.mygame.framework.Music;
 import com.mygame.framework.Pixmap;
 import com.mygame.framework.Sound;
 
@@ -20,7 +21,13 @@ public class Assets {
     public static Pixmap cloudBack;
     public static Pixmap ground;
     public static Pixmap gameWon;
+    public static Pixmap coin;
     
     public static Sound click;
     public static Sound fall;
+
+    public static Sound Winmz;
+    
+    public static Music backmz;
+    
 }
