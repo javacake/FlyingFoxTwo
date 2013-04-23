@@ -19,6 +19,7 @@
         <activity
             android:name="com.mygame.flyingfoxtwo.FlyingFox"
             android:configChanges="keyboard|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
