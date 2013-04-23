@@ -10,6 +10,23 @@ public class FlyingFox extends AndroidGame {
 	public Screen getStartScreen() {
 		return new LoadingScreen(this);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		Assets.backmz.dispose();
+		Assets.click.dispose();
+		Assets.Winmz.dispose();
+		Assets.fall.dispose();
+		
+		super.onDestroy();				
+	}
+	
+	@Override
+	public void onPause() {
+        if(Assets.backmz != null)
+        	Assets.backmz.stop();
+		super.onPause();        
+	}
 
 
 }

@@ -138,6 +138,7 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void dispose() {
+
 	}
 
 	
@@ -184,11 +185,11 @@ public class GameScreen extends Screen {
     
     private void updateGameOver(List<TouchEvent> touchEvents) {
     	
-        if(Settings.soundEnabled){
+/*        if(Settings.soundEnabled){
         	if(!Assets.backmz.isPlaying())
         		Assets.backmz.stop();
         	//Assets.fall.play(1);
-        }
+        }*/
     	
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
@@ -208,11 +209,11 @@ public class GameScreen extends Screen {
     
     private void updateGameWon(List<TouchEvent> touchEvents) {
     	
-        if(Settings.soundEnabled){
-        	if(!Assets.backmz.isPlaying())
-        		Assets.backmz.stop();
-        	//Assets.Winmz.play(1);
-        }    	
+//        if(Settings.soundEnabled){
+//        	if(!Assets.backmz.isPlaying())
+//        		Assets.backmz.stop();
+//        	//Assets.Winmz.play(1);
+//        }    	
     	
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
@@ -302,23 +303,37 @@ public class GameScreen extends Screen {
         }
     	
         //platforms
-        for(int i = 0;i < World.WORLD_WIDTH;i++){
-        	int increament = isHard?4:3;
-        	for(int j = 0;j < World.WORLD_HEIGHT;j+=increament){
-        		if(world.platform[i][j] == 1){
-        			g.drawPixmap(Assets.platform, i * PixelUnit, j * PixelUnit - world.worldPosition );
-        		}
-        	}
-        	
-        	for(int j = 0;j < World.WORLD_HEIGHT;j+=(increament+1)){
-        		//Draw platform near to each other minus three
-        			if(world.platform[i][j] == 2){
-        				g.drawPixmap(Assets.coin, i * PixelUnit, j * PixelUnit - world.worldPosition );
-        			}
-        		}
-        }
+        int visibleY = world.worldGridY + World.VISIBLE_HEIGHT;
         
         Fox fox = world.fox;
+        
+//        if(world.platform[fox.GridX][fox.GridY] == 2){
+//        	world.platform[fox.GridX][fox.GridY] = 0;
+//        	score += 15;
+//    	}     
+
+    	for(int x = 3;x < 7;x++){
+    		if(world.platform[x][3] == 1){
+    			g.drawPixmap(Assets.platform, x * PixelUnit,3 * PixelUnit - world.worldPosition );
+    		}    	
+    	}
+        
+        for(int x = 0;x < World.WORLD_WIDTH;x++){
+        	int increament = isHard?4:3;
+        	
+        	for(int y = 6;y < World.WORLD_HEIGHT;y+=increament){
+        		
+        		if(world.platform[x][y] == 1){
+        			g.drawPixmap(Assets.platform, x * PixelUnit, y * PixelUnit - world.worldPosition );
+        		}
+        		
+        		if((y-5 > 0)){	
+        			if(world.platform[x][y-5] == 2)
+        				g.drawPixmap(Assets.coin, x * PixelUnit, (y-5) * PixelUnit - world.worldPosition );
+        		}
+        	}
+        }
+
         if(fox.FaceLeft)
         	g.drawPixmap(Assets.foxL, fox.ScreenX, fox.ScreenY - world.worldPosition);
         else

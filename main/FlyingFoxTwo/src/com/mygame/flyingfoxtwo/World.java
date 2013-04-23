@@ -11,6 +11,7 @@ import android.util.Log;
 public class World {
     static final int WORLD_WIDTH = 10;
     static final int WORLD_HEIGHT = 30;
+    static final int VISIBLE_HEIGHT = 15;
     static final int SCORE_INCREMENT = 10;
     static final float TICK_INITIAL = 0.2f;
     static final float TICK_DECREMENT = 0.05f;
@@ -37,11 +38,13 @@ public class World {
     	this.isHard = isHard;
         fox = new Fox(4, WORLD_HEIGHT - 1);
         
-        worldPosition = worldGridY * GameScreen.PixelUnit;
+
         
         score = 0;
         scoregrid = 6;
-        worldGridY = WORLD_HEIGHT - 15; //Screen height
+        worldGridY = WORLD_HEIGHT - VISIBLE_HEIGHT; //Screen height
+        worldPosition = worldGridY * GameScreen.PixelUnit;        
+        
 		tickTime = 0;
 		smallTick = 0;
 		tick = TICK_INITIAL; //use to increase game speed by decreasing tick
@@ -50,22 +53,37 @@ public class World {
 		
         platform = new int[WORLD_WIDTH][WORLD_HEIGHT];
         Random random = new Random();
-        int i;
+        int x;
         int increament = isHard?4:3;
- 
-    	for(int j = 0;j < WORLD_HEIGHT;j+=(increament+2)){
-    		//Draw platform near to each other minus three
-    		if(random.nextInt(5)>=2){	
+        
+/*    	for(int j = 0;j < WORLD_HEIGHT;j+=(increament+3)){
+    		if(random.nextInt(5)>=3){	
     			i = random.nextInt(WORLD_WIDTH - 2);
     			platform[i][j] = 2;
     		}
-    	}        
+    	}   */     
         
-    	for(int j = 0;j < WORLD_HEIGHT;j+=increament){
+        //The final platform
+		platform[3][3] = 1;
+		platform[4][3] = 1;
+		platform[5][3] = 1;
+		platform[6][3] = 1;
+        
+		//Start after three positions below final platform
+    	for(int y = 6;y < WORLD_HEIGHT;y+=increament){
     		//Draw platform near to each other minus three
-    		i = random.nextInt(WORLD_WIDTH - 3);
-    		platform[i+1][j] = 1;
-    		platform[i+2][j] = 1;
+    		
+    		x = random.nextInt(WORLD_WIDTH - 3);
+    		platform[x+1][y] = 1;
+    		platform[x+2][y] = 1;
+
+    		//place random coin above five cells of the platform 
+    		if((y-5 > 0) && random.nextInt(5)>=3){	
+    			x = random.nextInt(WORLD_WIDTH - 2);
+    			if(platform[x][y-5] != 1)
+    			platform[x][y-5] = 2;
+    		}    	
+
     	}
 
     	updateScroll();
@@ -74,9 +92,9 @@ public class World {
 	public void update(float deltaTime, float accelX) {
 		// TODO Auto-generated method stub
         if (gameOver)return;
-
-        tickTime += deltaTime;
+        
         smallTick += deltaTime;
+        tickTime += deltaTime;
 
         while (smallTick > (tick/TICK_SLICE)) {
 			smallTick -= (tick/TICK_SLICE);
@@ -92,10 +110,7 @@ public class World {
 	
 				}
 				
-	            if(platform[fox.GridX][fox.GridY] == 2){
-	            	platform[fox.GridX][fox.GridY] = 0;
-	            	score += 15;
-	        	}
+
 
 	            if(fox.ScreenX > fox.NewScreenX)
 	            	fox.ScreenX -= 8;
@@ -176,6 +191,11 @@ public class World {
             
             fox.advance(accelX);
             updateScroll();
+            
+            if(platform[fox.GridX][fox.GridY] == 2){
+            	platform[fox.GridX][fox.GridY] = 0;
+            	score += 15;
+        	}
             
         }
 

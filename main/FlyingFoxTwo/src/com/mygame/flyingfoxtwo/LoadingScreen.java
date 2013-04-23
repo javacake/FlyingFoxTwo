@@ -59,6 +59,7 @@ public class LoadingScreen extends Screen {
 
 	@Override
 	public void dispose() {
+
 	}
 
 }

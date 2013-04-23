@@ -11,6 +11,7 @@ import android.os.PowerManager.WakeLock;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.mygame.flyingfoxtwo.Assets;
 import com.mygame.framework.Audio;
 import com.mygame.framework.FileIO;
 import com.mygame.framework.Game;
@@ -73,8 +74,9 @@ public abstract class AndroidGame extends Activity implements Game {
         renderView.pause();
         screen.pause();
 
-        if (isFinishing())
+        if (isFinishing()){
             screen.dispose();
+        }
     }
 
     @Override
