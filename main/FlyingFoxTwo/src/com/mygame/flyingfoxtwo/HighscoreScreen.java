@@ -41,7 +41,7 @@ public class HighscoreScreen extends Screen {
         Graphics g = game.getGraphics();
 
         g.drawPixmap(Assets.background, 0, 0);
-        g.drawPixmap(Assets.mainMenu, 64, 20, 0, 42, 196, 42);
+        g.drawPixmap(Assets.mainMenu, 64, 20, 0, 84, 196, 42);
 
         int y = 100;
         for (int i = 0; i < 5; i++) {
@@ -49,7 +49,7 @@ public class HighscoreScreen extends Screen {
             y += 50;
         }
 
-        g.drawPixmap(Assets.buttons, 0, 416, 0, 64, 64, 64);
+        g.drawPixmap(Assets.buttons, 0, 416, 0, 128, 64, 64);
 	}
 	
     public void drawText(Graphics g, String line, int x, int y) {
