@@ -6,29 +6,69 @@ import com.mygame.framework.Input.TouchEvent;
 import com.mygame.framework.Game;
 import com.mygame.framework.Screen;
 
+/**
+ * GameScreen class handles different state of the game play and delivers correct screen based on the game state.
+ * It also calls update function of the World class to keep game updated. It checks touch events and sends events to other class if relevant.
+ * 
+ * GameScreen class also creates World object and draws objects of the World class on the screen.
+ * 
+ */
 public class GameScreen extends Screen {
+    
+    /** Number of pixels in each grid cell of the World class. */
     static final int PixelUnit = 32;
 
+	/**
+	 * The Enum GameState specifies posible states of the game.
+	 */
 	enum GameState {
+        
+        /** The Ready state. */
         Ready,
+        
+        /** The Running state. */
         Running,
+        
+        /** The Paused state. */
         Paused,
+        
+        /** The Game over state. */
         GameOver,
+        
+        /** The Game won state. */
         GameWon
     }
     
+    /** Current state of the game. */
     GameState state = GameState.Ready;
+    
+    /** World object. */
     World world;
+    
+    /** Previous score of the game. */
     int oldScore = 0;
+    
+    /** Current score as a string. */
     String score = "0";
+    
+    /** Game difficulty mode. */
     boolean isHard = false;
     
+	/**
+	 * Creates a new GameScreen and initialises with game difficulty mode and Game reference object.
+	 *
+	 * @param game the game is reference to the main activity, this reference will be used to access resources in the assets folder. 
+	 * @param isHard Game difficulty mode.
+	 */
 	public GameScreen(Game game, boolean isHard) {
 		super(game);
 		world = new World(isHard);
 		this.isHard = isHard;
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#update(float)
+	 */
 	@Override
 	public void update(float deltaTime) {
 		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
@@ -49,6 +89,13 @@ public class GameScreen extends Screen {
 	}
 
     
+    /**
+     * Update running state of the game
+     *
+     * @param touchEvents the list of touch events
+     * @param deltaTime time span
+     * @param accelX accelerometer value of X-axis
+     */
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime, float accelX) {        
         int len = touchEvents.size();
         
@@ -96,6 +143,11 @@ public class GameScreen extends Screen {
     }
 
 	
+	/**
+	 * Update ready state of the game.
+	 *
+	 * @param touchEvents the list of screen touch events
+	 */
 	private void updateReady(List<TouchEvent> touchEvents) {
 	    if(touchEvents.size() > 0)
 	        state = GameState.Running;
@@ -106,6 +158,11 @@ public class GameScreen extends Screen {
 	    }
 	}
 
+	/**
+	 * Update paused state of the game.
+	 *
+	 * @param touchEvents the list of touch events
+	 */
 	private void updatePaused(List<TouchEvent> touchEvents) {
 		
 	    if(Settings.soundEnabled){
@@ -137,6 +194,11 @@ public class GameScreen extends Screen {
 	    }
 	}
 
+	/**
+	 * Update game over state of the game.
+	 *
+	 * @param touchEvents the list of touch events
+	 */
 	private void updateGameOver(List<TouchEvent> touchEvents) {
 	    	
 	/*        if(Settings.soundEnabled){
@@ -161,6 +223,11 @@ public class GameScreen extends Screen {
 	        }
 	    }
 
+	/**
+	 * Update game won state of the game.
+	 *
+	 * @param touchEvents the list of touch events
+	 */
 	private void updateGameWon(List<TouchEvent> touchEvents) {
 	    	
 	//        if(Settings.soundEnabled){
@@ -185,6 +252,10 @@ public class GameScreen extends Screen {
 	        }
 	    }
 
+	/* 
+	 * Draw screen based on current game state 
+	 * @see com.mygame.framework.Screen#present(float)
+	 */
 	@Override
 	public void present(float deltaTime) {
         Graphics g = game.getGraphics();
@@ -210,12 +281,18 @@ public class GameScreen extends Screen {
 	}
 	
 	
+	/**
+	 * Draw ready game screen.
+	 */
 	private void drawReadyUI() {
 	    Graphics g = game.getGraphics();
 	    
 	    g.drawPixmap(Assets.ready, 47, 100);
 	}
 
+	/**
+	 * Draw running game screen.
+	 */
 	private void drawRunningUI() {
 	    Graphics g = game.getGraphics();
 	    
@@ -224,12 +301,18 @@ public class GameScreen extends Screen {
 	    g.drawPixmap(Assets.buttons, 0, 416, 0, 64, 64, 64);
 	}
 
+	/**
+	 * Draw paused game screen.
+	 */
 	private void drawPausedUI() {
 	    Graphics g = game.getGraphics();
 	    
 	    g.drawPixmap(Assets.pause, 80, 100);
 	}
 
+	/**
+	 * Draw game over screen.
+	 */
 	private void drawGameOverUI() {
 	    Graphics g = game.getGraphics();
 	    
@@ -237,6 +320,9 @@ public class GameScreen extends Screen {
 	    g.drawPixmap(Assets.buttons, 128, 200, 0, 128, 64, 64);
 	}
 
+	/**
+	 * Draw game won screen.
+	 */
 	private void drawGameWonUI() {
 	    Graphics g = game.getGraphics();
 	    
@@ -244,8 +330,13 @@ public class GameScreen extends Screen {
 	    g.drawPixmap(Assets.buttons, 128, 200, 0, 128, 64, 64);
 	}
 
+	/**
+	 * Draw world items including fox on the screen.
+	 *
+	 * @param world object
+	 * @param deltaTime, delta time span
+	 */
 	private void drawWorld(World world, float deltaTime) {
-			// TODO drawWorld
 	        Graphics g = game.getGraphics();
 	    	g.drawPixmap(Assets.cloudBack, 0, 0);
 	
@@ -257,7 +348,7 @@ public class GameScreen extends Screen {
 	        }
 	    	
 	        //platforms
-	        int visibleY = world.worldGridY + World.VISIBLE_HEIGHT;
+	        //int visibleY = world.worldGridY + World.VISIBLE_HEIGHT;
 	        
 	        Fox fox = world.fox;
 	        
@@ -295,6 +386,14 @@ public class GameScreen extends Screen {
 	        	
 		}
 
+	/**
+	 * Draw numbers at given positions by x and y. 
+	 *
+	 * @param g the graphics reference object
+	 * @param line numbers to draw
+	 * @param x the left position
+	 * @param y the top position
+	 */
 	public void drawText(Graphics g, String line, int x, int y) {
 	    int len = line.length();
 	    for (int i = 0; i < len; i++) {
@@ -320,6 +419,10 @@ public class GameScreen extends Screen {
 	    }
 	}
 
+	/*
+	 * Save game score
+	 * @see com.mygame.framework.Screen#pause()
+	 */
 	@Override
 	public void pause() {
         if(state == GameState.Running)
@@ -331,10 +434,16 @@ public class GameScreen extends Screen {
         }
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#resume()
+	 */
 	@Override
 	public void resume() {
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#dispose()
+	 */
 	@Override
 	public void dispose() {
 

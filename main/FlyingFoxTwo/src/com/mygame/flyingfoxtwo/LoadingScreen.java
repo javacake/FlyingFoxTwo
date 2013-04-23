@@ -4,14 +4,25 @@ import com.mygame.framework.Graphics;
 import com.mygame.framework.Graphics.PixmapFormat;
 import com.mygame.framework.Game;
 import com.mygame.framework.Screen;
-import com.mygame.framework.Sound;
 
+/**
+ * The Class LoadingScreen is the first class instantiated by the main activity.
+ * It first loads all the media resources then loads settings and start menu screen.
+ */
 public class LoadingScreen extends Screen {
 
+	/**
+	 * Creates a new loading screen.
+	 *
+	 * @param game the game is reference to the main activity, this reference will be used to access resources in the assets folder.  
+	 */
 	public LoadingScreen(Game game) {
 		super(game);
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#update(float)
+	 */
 	@Override
 	public void update(float deltaTime) {
         Graphics g = game.getGraphics();
@@ -45,18 +56,30 @@ public class LoadingScreen extends Screen {
 
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#present(float)
+	 */
 	@Override
 	public void present(float deltaTime) {
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#pause()
+	 */
 	@Override
 	public void pause() {
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#resume()
+	 */
 	@Override
 	public void resume() {
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#dispose()
+	 */
 	@Override
 	public void dispose() {
 

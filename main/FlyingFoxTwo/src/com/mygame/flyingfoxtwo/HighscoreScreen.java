@@ -6,9 +6,19 @@ import com.mygame.framework.Graphics;
 import com.mygame.framework.Game;
 import com.mygame.framework.Screen;
 
+/**
+ * The Class HighscoreScreen creates a screen to display last five high scores.
+ */
 public class HighscoreScreen extends Screen {
+    
+    /** An string array to hold last five highscores from the settings*/
     String lines[] = new String[5];
     
+	/**
+	 * Creates a new HighscoreScreen object.
+	 *
+	 * @param game the game is reference to the main activity, this reference will be used to access resources in the assets folder. 
+	 */
 	public HighscoreScreen(Game game) {
 		super(game);
 		
@@ -17,6 +27,9 @@ public class HighscoreScreen extends Screen {
         }
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#update(float)
+	 */
 	@Override
 	public void update(float deltaTime) {
         List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
@@ -36,6 +49,9 @@ public class HighscoreScreen extends Screen {
         }
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#present(float)
+	 */
 	@Override
 	public void present(float deltaTime) {
         Graphics g = game.getGraphics();
@@ -52,6 +68,14 @@ public class HighscoreScreen extends Screen {
         g.drawPixmap(Assets.buttons, 0, 416, 0, 128, 64, 64);
 	}
 	
+    /**
+     * This method will write numbers passed as a string at the specified position by x and y in pixel.
+     *
+     * @param g is reference to the Graphics context.
+     * @param line is a number to draw on the screen
+     * @param x is a left position of the text to draw.
+     * @param y is a top position of the text to draw.
+     */
     public void drawText(Graphics g, String line, int x, int y) {
         int len = line.length();
         for (int i = 0; i < len; i++) {
@@ -77,21 +101,27 @@ public class HighscoreScreen extends Screen {
         }
     }
     
+	/* 
+	 * @see com.mygame.framework.Screen#pause()
+	 */
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#resume()
+	 */
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 
 	}
 
+	/* 
+	 * @see com.mygame.framework.Screen#dispose()
+	 */
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 
 	}
 

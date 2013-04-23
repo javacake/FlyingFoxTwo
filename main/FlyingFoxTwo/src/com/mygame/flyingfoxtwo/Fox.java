@@ -1,31 +1,71 @@
 package com.mygame.flyingfoxtwo;
 
-
+/**
+ * The fox is the main moving object in the game.
+ * Fox continuously jumps during the game and moves left or right based on accelerometer events.
+ * 
+ */
 public class Fox {
 
+    /** indicates up moving direction  */
     final int UP = -1;
+    
+    /** Indicates down moving direction */
     final int DOWN = 1;
+    
+    /** Indicates left moving direction. */
     final int LEFT = -1;
+    
+    /** Indicates right moving direction. */
     final int RIGHT = 1;
+    
+    /** Sets moving direction to none. */
     final int NONE = 0;
     
+    /** Jump height is a number of grid cells specified in World object.*/
     final int JUMP_HEIGHT = 3;
+    
 	
+	/** Left Position in the World grid */
 	public int GridX;
+	
+	/** Top position in the World grid. */
 	public int GridY;
 	
+	/** Left position on the device Screen in pixel. */
 	public int ScreenX;
+	
+	/** Top position on the device Screen in pixel. */
 	public int ScreenY;
+	
+	/** Next left screen position to move. */
 	public int NewScreenX;
+	
+	/** Next top screen position to move. */
 	public int NewScreenY;
 	
+	/** Holds jump height count down*/
 	public int jumpTick;
+	
+	/** Distance in pixel to move with each small update */
 	public int deltaDst;
 	
+	/** The Vertical moving direction. */
 	public int VerticalDirection;
+	
+	/** The Horizontal moving direction. */
 	public int HorizontalDirection;
+	
+	/** Flag to draw correct fox image based on horizontal moving direction. */
 	public boolean FaceLeft;
 	
+	/**
+	 * Creates a new fox and sets its initial position x and y in the world grid.
+	 * Fox will be in the jump mode the time it initialises. 
+	 * 
+	 * @param x the left position in the world grid.
+	 * @param y the top position in the world grid.
+	 */
 	public Fox(int x, int y){
 		HorizontalDirection = NONE;
 		FaceLeft = true;
@@ -45,13 +85,23 @@ public class Fox {
 	}
 
 	
+	/**
+	 * It initialises new jump by setting UP to VerticalDirection variable and resetting jumpTick jump count down variable.
+	 */
 	public void jump(){
 		VerticalDirection = UP;
 		jumpTick = JUMP_HEIGHT;
 	}
 	
+	/**
+	 * This method will move fox to next grid position based on Horizontal and Vertical moving direction.
+	 * It will also calculate new screen position in pixel to draw fox image on the screen. 
+	 *
+	 * @param accelX, Accelerometer value of X axis use to change Horizontal moving direction.
+	 */
 	public void advance(float accelX) {
 		
+		//First set horizontal direction based on accelerometer value then call updateHorizontalMove method.
 		if(accelX >= 1)
 			HorizontalDirection = LEFT;
 		else if(accelX <= -1)
@@ -59,6 +109,7 @@ public class Fox {
 
 		updateHorizontalMove();
 
+		//Pixel to move on each small tick to the next grid. 
 		deltaDst = GameScreen.PixelUnit / World.TICK_SLICE;
 		
 		//Advance grid position for continue jump
@@ -88,13 +139,25 @@ public class Fox {
 	}
 
 	
+	/**
+	 * This method will be called if user touches screen button to change the direction.
+	 */
 	public void jumpLeft() {
 		HorizontalDirection = LEFT;
 	}
+	
+	/**
+	 * This method will be called if user touches screen button to change the direction.
+	 */
 	public void jumpRight() {
 		HorizontalDirection = RIGHT;
 	}
 	
+	/**
+	 * Advance horizontal moving position based on direction.
+	 * it needs to reset the direction for the next game loop tick so if user is not pressing any button or 
+	 * phone is not tilted the fox will jump on the current position and will not move horizontally.
+	 */
 	private void updateHorizontalMove(){
 		if(HorizontalDirection == LEFT){
 			FaceLeft = true;
@@ -155,7 +218,7 @@ public class Fox {
 			
 			//***************************
 			//***************************
-			//TODO Game winning condition
+			//TO DO Game winning condition
 			//***************************
 			//***************************
 		}	
