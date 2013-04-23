@@ -140,7 +140,7 @@ public class World {
             if(fox.GridY < WORLD_HEIGHT - 7 ){
             	if(scoregrid < WORLD_HEIGHT - fox.GridY){
             		scoregrid++;
-            		score = (scoregrid - 6) * 20;
+            		score += 20;
             	}
             }
             
